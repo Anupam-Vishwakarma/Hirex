@@ -114,20 +114,41 @@ const css = `
   }
 
   /* ── PANEL CARD ── */
-  .why-panel {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 48px 44px 44px;
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    /* Reveal */
-    opacity: 0;
-    transform: translateY(28px);
-    animation: panelReveal 0.75s cubic-bezier(0.22,1,0.36,1) var(--pd, 0s) forwards;
-  }
+.why-panel {
+  background: #080f22; /* default left panel bg */
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 48px 44px 44px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+
+  /* Reveal */
+  opacity: 0;
+  transform: translateY(28px);
+  animation: panelReveal 0.75s cubic-bezier(0.22,1,0.36,1) var(--pd, 0s) forwards;
+}
+
+/* LEFT PANEL — keep base background */
+.why-panel:first-child {
+  background: #080f22;
+}
+
+/* RIGHT PANEL — slightly elevated theme shade */
+.why-panel:last-child {
+  background: linear-gradient(
+    145deg,
+    #0a1228 0%,
+    #0d1a35 100%
+  );
+}
+
+/* Optional subtle highlight for right panel */
+.why-panel:last-child:hover {
+  box-shadow: 0 16px 48px rgba(26,109,255,0.12);
+}
+
 
   .why-panel:nth-child(1) { --pd: 0.1s; }
   .why-panel:nth-child(2) { --pd: 0.25s; }
