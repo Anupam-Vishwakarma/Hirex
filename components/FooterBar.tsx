@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 /* ─────────────────────────────────────────────
-   DATA — matched exactly to Image 2 (Wellfound layout)
+   DATA
 ───────────────────────────────────────────── */
 const cols = [
   {
@@ -22,15 +22,12 @@ const cols = [
 
 const browseLinks = ['Jobs', 'Remote Jobs', 'Locations', 'Startups', 'Startups Hiring', 'Industries', 'Tech Hubs'];
 
-/* ─────────────────────────────────────────────
-   SOCIAL ICONS — placeholder paths, user will supply
-───────────────────────────────────────────── */
 const socials = [
-  { label: 'Facebook / X', src: '/logo/facebook.png' },
-  { label: 'Twitter',   src: '/logo/twitter.png' },
-  { label: 'Instagram',   src: '/logo/instagram.png' },
+  { label: 'Facebook', src: '/logo/facebook.png' },
+  { label: 'Twitter',  src: '/logo/twitter.png' },
+  { label: 'Instagram', src: '/logo/instagram.png' },
   { label: 'LinkedIn', src: '/logo/linkedin.png' },
-  { label: 'You Tube / X', src: '/logo/youtube.png' },
+  { label: 'YouTube',  src: '/logo/youtube.png' },
 ];
 
 /* ─────────────────────────────────────────────
@@ -39,7 +36,6 @@ const socials = [
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500&display=swap');
 
-  /* ── GLOW KEYFRAMES ── */
   @keyframes glowPulse {
     0%   { opacity: 0.55; }
     50%  { opacity: 1; }
@@ -51,12 +47,6 @@ const css = `
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes iconFloat {
-    0%   { transform: translateY(0) scale(1); }
-    50%  { transform: translateY(-4px) scale(1.07); }
-    100% { transform: translateY(0) scale(1); }
-  }
-
   @keyframes shimmer {
     0%   { background-position: -400% center; }
     100% { background-position:  400% center; }
@@ -64,27 +54,21 @@ const css = `
 
   /* ── ROOT VARS ── */
   .footer {
-    --bg:        #04091a;
-    --card-bg:   #080f22;
-    --accent:    #1a6dff;
-    --border:    rgba(26,109,255,0.12);
-    --text:      #ffffff;
-    --muted:     rgba(255,255,255,0.38);
-    --link:      rgba(255,255,255,0.50);
-    --glow-col:  rgba(26,109,255,0.18);
+    --bg:       #04091a;
+    --accent:   #1a6dff;
+    --border:   rgba(26,109,255,0.12);
+    --text:     #ffffff;
+    --muted:    rgba(255,255,255,0.38);
+    --link:     rgba(255,255,255,0.50);
 
     width: 100%;
     background: var(--bg);
     font-family: 'Inter', sans-serif;
     position: relative;
     overflow: hidden;
-
-    /* top border glow */
-    border-top: 1px solid transparent;
-    background-clip: padding-box;
   }
 
-  /* ── AMBIENT GLOW LAYERS ── */
+  /* ── AMBIENT GLOW ── */
   .footer::before {
     content: '';
     position: absolute;
@@ -107,7 +91,7 @@ const css = `
     z-index: 0;
   }
 
-  /* glowing top border line */
+  /* ── GLOWING TOP BORDER ── */
   .footer-glow-border {
     position: absolute;
     top: 0; left: 0; right: 0;
@@ -125,7 +109,6 @@ const css = `
     z-index: 1;
   }
 
-  /* ── INNER WRAPPER ── */
   .footer-inner {
     position: relative;
     z-index: 2;
@@ -137,7 +120,6 @@ const css = `
     margin: 0 auto;
     padding: 72px 56px 60px;
     display: grid;
-    /* Big brand left, three nav cols right — mirrors Image 2 */
     grid-template-columns: 1.9fr 1fr 1fr 1fr;
     gap: 0 40px;
     align-items: start;
@@ -147,7 +129,7 @@ const css = `
   }
   .footer-body.visible { animation-play-state: running; }
 
-  /* ── BRAND COL ── */
+  /* ── BRAND ── */
   .footer-brand { grid-column: 1 / 2; }
 
   .footer-logo-img {
@@ -156,17 +138,14 @@ const css = `
     max-width: 200px;
     object-fit: contain;
     display: block;
-    margin-bottom: 0;
   }
 
-  /* Fallback wordmark */
   .footer-logo-text {
     display: none;
     font-family: 'Sora', sans-serif;
     font-size: 2rem;
     font-weight: 800;
     letter-spacing: -0.04em;
-    margin-bottom: 0;
     line-height: 1;
   }
   .footer-logo-text .hl { color: var(--text); }
@@ -175,14 +154,13 @@ const css = `
     text-shadow: 0 0 18px rgba(26,109,255,0.7);
   }
 
-  /* ── NAV COLUMN ── */
+  /* ── NAV COLUMNS ── */
   .footer-col-heading {
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--text);
     letter-spacing: 0.01em;
-    text-transform: none;
     margin: 0 0 20px;
   }
 
@@ -198,7 +176,6 @@ const css = `
     font-weight: 400;
     color: var(--link);
     text-decoration: none;
-    letter-spacing: 0em;
     transition: color 0.18s ease;
     display: inline-block;
     line-height: 1.2;
@@ -233,104 +210,142 @@ const css = `
   .footer-bottom {
     max-width: 1160px;
     margin: 0 auto;
-    padding: 24px 56px 28px;
+    padding: 20px 56px 28px;
     display: flex;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
     gap: 24px;
-    flex-wrap: wrap;
     opacity: 0;
     animation: ftReveal 0.7s cubic-bezier(0.22,1,0.36,1) 0.45s forwards;
     animation-play-state: paused;
   }
   .footer-bottom.visible { animation-play-state: running; }
 
-  /* ── SOCIAL ICONS — placeholder images ── */
+  /* LEFT — Social Icons */
+  .footer-left {
+    flex: 0 0 auto;
+  }
+
   .footer-socials {
     display: flex;
-    gap: 14px;
+    gap: 12px;
     align-items: center;
   }
 
+  /* ── ROUNDED SOCIAL ICONS ── */
   .social-img-btn {
-    width: 36px; height: 36px;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0.82;
-    transition: opacity 0.22s ease, transform 0.22s ease, filter 0.22s ease;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.85;
+    transition: opacity 0.22s ease, filter 0.22s ease;
     cursor: pointer;
-    position: relative;
     text-decoration: none;
-    overflow: hidden;  
+    overflow: hidden;
   }
   .social-img-btn img {
-  width: 100%; height: 100%;
-  object-fit: contain;
-  display: block;
-  transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
-}
-.social-img-btn:hover {
-  opacity: 1;
-  filter: drop-shadow(0 0 10px rgba(26,109,255,0.55));
-}
-.social-img-btn:hover img {
-  transform: scale(1.22);
-}
-.social-img-btn:active img { transform: scale(0.92); }
-  .social-img-btn:active { transform: scale(0.96); }
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .social-img-btn:hover {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(26,109,255,0.55));
+  }
+  .social-img-btn:hover img { transform: scale(1.18); }
+  .social-img-btn:active img { transform: scale(0.90); }
 
-  /* ── COPYRIGHT ── */
+  /* CENTER — Copyright */
+  .footer-center {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* copyright — slightly smaller, dimmer */
   .footer-copy {
     font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    color: var(--muted);
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.42);
     margin: 0;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    letter-spacing: 0.01em;
   }
 
+  /* cookie — brighter + distinct underline to visually separate */
   .footer-cookie {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    color: var(--muted);
+    margin-left: 16px;
+    font-size: 0.80rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.65);
     text-decoration: underline;
-    transition: color 0.18s;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255,255,255,0.28);
+    white-space: nowrap;
     cursor: pointer;
-    text-underline-offset: 2px;
-    margin-left: 12px;
+    transition: color 0.15s, text-decoration-color 0.15s;
   }
-  .footer-cookie:hover { color: rgba(255,255,255,0.75); }
+  .footer-cookie:hover {
+    color: rgba(255,255,255,0.92);
+    text-decoration-color: rgba(255,255,255,0.55);
+  }
 
-  /* ── BROWSE ROW — pushed to right ── */
-  .footer-browse-wrap {
-    margin-left: auto;
+  /* RIGHT — Browse */
+  .footer-right {
+    flex: 0 0 auto;
   }
 
   .footer-browse {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 3px;
     font-family: 'Inter', sans-serif;
     font-size: 0.78rem;
+    white-space: nowrap;
   }
 
+  /* "Browse by:" label — dim + uppercase for visual contrast */
   .footer-browse-label {
-    color: var(--muted);
-    margin-right: 4px;
+    color: rgba(255,255,255,0.32);
+    margin-right: 5px;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
+  /* browse links — brighter than label */
   .footer-browse-link {
-    color: rgba(255,255,255,0.45);
+    color: rgba(255,255,255,0.58);
     text-decoration: underline;
     text-underline-offset: 2px;
-    transition: color 0.15s;
+    text-decoration-color: rgba(255,255,255,0.18);
+    transition: color 0.15s, text-decoration-color 0.15s;
     cursor: pointer;
+    font-weight: 400;
   }
-  .footer-browse-link:hover { color: var(--text); }
+  .footer-browse-link:hover {
+    color: var(--text);
+    text-decoration-color: rgba(255,255,255,0.50);
+  }
 
   .footer-browse-sep {
-    color: rgba(255,255,255,0.22);
+    color: rgba(255,255,255,0.18);
   }
 
-  /* ── RESPONSIVE ── */
+  /* ── RESPONSIVE: Tablet ── */
   @media (max-width: 960px) {
     .footer-body {
       grid-template-columns: 1fr 1fr;
@@ -338,45 +353,60 @@ const css = `
       gap: 36px 32px;
     }
     .footer-brand { grid-column: 1 / -1; }
-    .footer-bottom { padding: 20px 32px 24px; }
-  }
-  @media (max-width: 600px) {
-    .footer-body { grid-template-columns: 1fr; }
-    .footer-bottom { flex-direction: column; align-items: flex-start; gap: 14px; }
-    .footer-browse-wrap { margin-left: 0; }
-    .footer::before { width: 340px; height: 200px; }
-  }
 
-@media (max-width: 600px) {
-  .footer-bottom {
-    gap: 18px;
+    .footer-bottom {
+      padding: 20px 32px 24px;
+      gap: 16px;
+    }
+
+    .footer-browse {
+      flex-wrap: wrap;
+    }
   }
 
-  .footer-copy,
-  .footer-cookie {
-    font-size: 0.78rem;
+  /* ── RESPONSIVE: Mobile ── */
+  @media (max-width: 640px) {
+    .footer::before,
+    .footer::after { display: none; }
+
+    .footer-body {
+      grid-template-columns: 1fr;
+      padding: 40px 20px 32px;
+      gap: 28px;
+    }
+
+    /* Stack bottom bar into 3 rows */
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px 20px 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-center {
+      justify-content: flex-start;
+    }
+
+    .footer-copy {
+      flex-wrap: wrap;
+      white-space: normal;
+      gap: 4px;
+    }
+
+    .footer-cookie {
+      margin-left: 0;
+    }
+
+    .footer-browse {
+      flex-wrap: wrap;
+      white-space: normal;
+    }
   }
-}
-
-@media (max-width: 600px) {
-  .footer-browse {
-    line-height: 1.6;
-  }
-}
-
-@media (max-width: 600px) {
-  .footer::before,
-  .footer::after {
-    display: none;
-  }
-}
-
-
-
 `;
 
 /* ─────────────────────────────────────────────
-   SOCIAL IMAGE BUTTON
+   SOCIAL BUTTON
 ───────────────────────────────────────────── */
 function SocialImgBtn({ label, src }: { label: string; src: string }) {
   return (
@@ -390,7 +420,7 @@ function SocialImgBtn({ label, src }: { label: string; src: string }) {
    MAIN COMPONENT
 ───────────────────────────────────────────── */
 export default function Footer() {
-  const footerRef  = useRef<HTMLElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
   const [visible, setVisible]   = useState(false);
   const [imgError, setImgError] = useState(false);
 
@@ -412,7 +442,6 @@ export default function Footer() {
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <footer className="footer" ref={footerRef}>
 
-        {/* Animated glowing top border */}
         <div className="footer-glow-border" />
 
         <div className="footer-inner">
@@ -420,34 +449,35 @@ export default function Footer() {
           {/* ── MAIN BODY ── */}
           <div className={`footer-body${v}`}>
 
-            {/* Brand — large left section */}
-              <div className="footer-brand">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  {!imgError ? (
-                    <img
-                      src="/logo/hirex-logo.png" alt="HireX logo"
-                      className="footer-logo-img"
-                      onError={() => setImgError(true)}
-                    />
-                  ) : (
-                    <div className="footer-logo-text" style={{ display: 'block' }}>
-                      <span className="hl">HireX</span>
-                      <span className="ai">:ai</span>
-                    </div>
-                  )}
-                  <span style={{
-                    fontFamily: "'Sora', sans-serif",
-                    fontWeight: 700,
-                    fontSize: '1.2rem',
-                    color: '#ffffff',
-                    letterSpacing: '-0.025em',
-                  }}>
-                    HireX
-                  </span>
-                </div>
+            {/* Brand */}
+            <div className="footer-brand">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {!imgError ? (
+                  <img
+                    src="/logo/hirex-logo.png"
+                    alt="HireX logo"
+                    className="footer-logo-img"
+                    onError={() => setImgError(true)}
+                  />
+                ) : (
+                  <div className="footer-logo-text" style={{ display: 'block' }}>
+                    <span className="hl">HireX</span>
+                    <span className="ai">:ai</span>
+                  </div>
+                )}
+                <span style={{
+                  fontFamily: "'Sora', sans-serif",
+                  fontWeight: 700,
+                  fontSize: '1.2rem',
+                  color: '#ffffff',
+                  letterSpacing: '-0.025em',
+                }}>
+                  HireX
+                </span>
               </div>
+            </div>
 
-            {/* Nav columns — staggered reveal */}
+            {/* Nav columns */}
             {cols.map((col, ci) => (
               <div
                 key={col.heading}
@@ -478,27 +508,31 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Glowing divider */}
+          {/* Divider */}
           <div className="footer-divider" />
 
           {/* ── BOTTOM BAR ── */}
           <div className={`footer-bottom${v}`}>
 
-            {/* Social icons — left */}
-            <div className="footer-socials">
-              {socials.map(s => (
-                <SocialImgBtn key={s.label} label={s.label} src={s.src} />
-              ))}
+            {/* LEFT — Socials */}
+            <div className="footer-left">
+              <div className="footer-socials">
+                {socials.map(s => (
+                  <SocialImgBtn key={s.label} label={s.label} src={s.src} />
+                ))}
+              </div>
             </div>
 
-            {/* Copyright + cookie */}
-            <p className="footer-copy">
-              Copyright © 2026 HireX. All rights reserved.
-            </p>
-            <a href="#" className="footer-cookie">Cookie Preferences</a>
+            {/* CENTER — Copyright + Cookie */}
+            <div className="footer-center">
+              <p className="footer-copy">
+                Copyright © 2026 HireX. All rights reserved.
+                <a href="#" className="footer-cookie">Cookie Preferences</a>
+              </p>
+            </div>
 
-            {/* Browse — pushed right via margin-left:auto on wrapper */}
-            <div className="footer-browse-wrap">
+            {/* RIGHT — Browse by */}
+            <div className="footer-right">
               <div className="footer-browse">
                 <span className="footer-browse-label">Browse by:</span>
                 {browseLinks.map((link, i) => (
