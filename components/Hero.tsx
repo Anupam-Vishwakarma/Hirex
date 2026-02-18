@@ -419,6 +419,10 @@ const css = `
   }
 }
 
+.mobile-break {
+  margin-left: 10px;
+}
+
 `;
 
 /* ─────────────────────────────────────────────
@@ -452,13 +456,12 @@ export default function Hero() {
 
           <div className="hero-headline-wrap">
             <h1>
-            <span className="h-prefix">H:</span>
-            <span className="h-boxed">
-              Find what's <span className="mobile-break">next</span>
+              <span className="h-prefix">H:</span>
+              <span className="h-boxed">
+                Find what's{" "}
+              <span className="mobile-break">next</span>
             </span>
-          </h1>
-
-
+          </h1>      
           </div>
 
           <div className="hero-bottom">
