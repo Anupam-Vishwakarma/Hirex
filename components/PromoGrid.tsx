@@ -36,23 +36,41 @@
       max-width: 1100px;
     }
 
-    /* ── CARD ── */
-    .promo-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 38px 38px 34px;
-      display: flex;
-      flex-direction: column;
-      min-height: 340px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.28s, box-shadow 0.28s, transform 0.28s;
-      /* Scroll reveal */
-      opacity: 0;
-      transform: translateY(28px);
-      animation: pgReveal 0.75s cubic-bezier(0.22,1,0.36,1) var(--cd, 0.1s) forwards;
-    }
+   /* ── CARD ── */
+.promo-card {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 38px 38px 34px;
+  display: flex;
+  flex-direction: column;
+  min-height: 340px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.28s, box-shadow 0.28s, transform 0.28s;
+
+  /* Default background (LEFT CARD) */
+  background: #080f22;
+
+  /* Scroll reveal */
+  opacity: 0;
+  transform: translateY(28px);
+  animation: pgReveal 0.75s cubic-bezier(0.22,1,0.36,1) var(--cd, 0.1s) forwards;
+}
+
+/* LEFT CARD — keep base */
+.promo-card:first-child {
+  background: #080f22;
+}
+
+/* RIGHT CARD — slightly elevated theme shade */
+.promo-card:last-child {
+  background: linear-gradient(
+    145deg,
+    #0a132b 0%,
+    #0d1b3d 100%
+  );
+}
+
 
     .promo-card:nth-child(1) { --cd: 0.1s; }
     .promo-card:nth-child(2) { --cd: 0.25s; }
