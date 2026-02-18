@@ -117,21 +117,63 @@ const css = `
   }
 
   .badge-nums {
-    display: flex; align-items: baseline;
-    justify-content: center; gap: 3px;
-    margin-bottom: 4px;
-  }
+  display: flex;
+  align-items: center;   /* baseline hatao */
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
   .badge-num-accent {
     font-family: 'Sora', sans-serif;
     font-size: 40px; font-weight: 900;
     color: #1a6dff; line-height: 1;
     letter-spacing: -0.03em;
   }
-  .badge-of {
-    font-family: 'Sora', sans-serif;
-    font-size: 13px; font-weight: 700;
-    color: #444; margin: 0 2px;
-  }
+ .badge-of,
+.badge-in {
+  position: relative;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #444;
+  letter-spacing: 0.08em;
+  padding: 0 6px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* red lines */
+.badge-of::before,
+.badge-of::after,
+.badge-in::before,
+.badge-in::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 3px;
+  background: #ff3b3b;
+  border-radius: 2px;
+}
+
+/* TOP LINE — align closer to number mid */
+.badge-of::before,
+.badge-in::before {
+  top: -6px;
+}
+
+/* BOTTOM LINE */
+.badge-of::after,
+.badge-in::after {
+  bottom: -6px;
+}
+
+
+
+
   .badge-num-dark {
     font-family: 'Sora', sans-serif;
     font-size: 40px; font-weight: 900;
@@ -140,13 +182,12 @@ const css = `
   }
 
   .badge-year-row {
-    display: flex; align-items: baseline;
-    justify-content: center; gap: 5px;
-  }
-  .badge-in {
-    font-family: 'Sora', sans-serif;
-    font-size: 13px; font-weight: 700; color: #444;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
   .badge-year {
     font-family: 'Sora', sans-serif;
     font-size: 30px; font-weight: 900; color: #1a1a2e;
