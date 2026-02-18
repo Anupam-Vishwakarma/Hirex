@@ -503,6 +503,40 @@ const css = `
 
 }
 
+.ap-searching {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+
+/* Base avatar */
+.ap-search-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(13,21,53,0.8);
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+  position: relative;
+}
+
+/* Zig-zag effect */
+.ap-search-avatar:nth-child(odd) {
+  transform: translateY(-6px);
+}
+
+.ap-search-avatar:nth-child(even) {
+  transform: translateY(6px);
+}
+
+/* Keep hover effect */
+.ap-search-avatar:hover {
+  transform: scale(1.15) translateY(-3px) !important;
+  z-index: 10;
+}
+
 
 `;
 
@@ -602,7 +636,7 @@ export default function AutopilotSection() {
                   className="ap-search-avatar"
                   src={src}
                   alt={`candidate-${i}`}
-                  style={{ marginLeft: i > 0 ? '-8px' : 0, zIndex: searchAvatars.length - i }}
+                  style={{ marginLeft: i > 0 ? '0px' : 0, zIndex: searchAvatars.length - i}}
                   onError={e => {
                     const img = e.currentTarget as HTMLImageElement;
                     img.style.background = ['#a29bfe','#74b9ff','#55efc4','#ffeaa7','#fd79a8','#fdcb6e','#e17055','#00cec9','#6c5ce7','#badc58'][i % 10];
