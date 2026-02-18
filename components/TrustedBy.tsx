@@ -146,198 +146,102 @@ export default function TrustedBy() {
         }
 
         /* ── SECTION ───────────────────────────── */
-        .trusted-section {
+
+         .trusted-section {
           position: relative;
           width: 100%;
-          /* Glassy: frosted inner layer on deep navy — same theme, just depth added */
-          background:
-            linear-gradient(
-              180deg,
-              rgba(14,24,48,0.92) 0%,
-              rgba(6,12,30,0.96)  50%,
-              rgba(14,24,48,0.92) 100%
-            );
-          backdrop-filter: blur(18px) saturate(1.4);
-          -webkit-backdrop-filter: blur(18px) saturate(1.4);
-          padding: 52px 0 58px;
+          background: #04091a;   
+          padding: 40px 0 50px;
           overflow: hidden;
-          isolation: isolate;
         }
 
-        /* ── GLASSY INNER SHEEN ── */
-        .trusted-section::before {
-          content: '';
-          position: absolute; inset: 0;
-          background:
-            radial-gradient(ellipse 70% 90% at 50% 50%,  rgba(26,109,255,0.10) 0%, transparent 65%),
-            radial-gradient(ellipse 30% 60% at 20% 50%,  rgba(26,109,255,0.06) 0%, transparent 60%),
-            radial-gradient(ellipse 30% 60% at 80% 50%,  rgba(26,109,255,0.06) 0%, transparent 60%);
-          animation: breathe 5s ease-in-out infinite;
-          pointer-events: none;
-          z-index: 0;
-        }
+        /* ───────── CENTER DIVIDER LINE ───────── */
 
-        /* Glassy reflection highlight — top inner sheen stripe */
-        .trusted-section::after {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0;
+        .section-divider {
+          width: 120px;
           height: 1px;
+          margin: 0 auto 50px auto;
           background: linear-gradient(
             90deg,
-            transparent 0%,
-            rgba(255,255,255,0.06) 30%,
-            rgba(255,255,255,0.12) 50%,
-            rgba(255,255,255,0.06) 70%,
-            transparent 100%
+            transparent,
+            rgba(80,160,255,0.6),
+            transparent
           );
-          pointer-events: none;
-          z-index: 1;
+          opacity: 0.6;
         }
 
-        /* ── TOP BORDER GLOW ── */
-        .trusted-border-top {
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 2px;
-          background: linear-gradient(
-            90deg,
-            transparent     0%,
-            rgba(26,109,255,0.3)  10%,
-            rgba(80,160,255,0.9)  30%,
-            rgba(140,200,255,1)   50%,
-            rgba(80,160,255,0.9)  70%,
-            rgba(26,109,255,0.3)  90%,
-            transparent     100%
-          );
-          background-size: 200% 100%;
-          animation: borderShimmer 3.5s linear infinite;
-          z-index: 4;
+        /* ───────── CONTAINER FOR CENTER ALIGN ───────── */
+
+        .trusted-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 24px;
+          position: relative;
         }
 
-        /* Bloom beneath top border */
-        .trusted-border-top::after {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 40px;
-          background: linear-gradient(
-            180deg,
-            rgba(26,109,255,0.18) 0%,
-            transparent 100%
-          );
-          pointer-events: none;
-        }
+        /* ───────── EDGE FADE MATCHED TO BG ───────── */
 
-        /* ── BOTTOM BORDER GLOW ── */
-        .trusted-border-bottom {
-          position: absolute;
-          bottom: 0; left: 0; right: 0;
-          height: 2px;
-          background: linear-gradient(
-            90deg,
-            transparent     0%,
-            rgba(26,109,255,0.2)  15%,
-            rgba(80,160,255,0.7)  40%,
-            rgba(80,160,255,0.7)  60%,
-            rgba(26,109,255,0.2)  85%,
-            transparent     100%
-          );
-          background-size: 200% 100%;
-          animation: borderShimmer 3.5s linear 1.75s infinite;
-          z-index: 4;
-        }
-
-        /* Bloom above bottom border */
-        .trusted-border-bottom::after {
-          content: '';
-          position: absolute;
-          bottom: 0; left: 0; right: 0;
-          height: 36px;
-          background: linear-gradient(
-            0deg,
-            rgba(26,109,255,0.12) 0%,
-            transparent 100%
-          );
-          pointer-events: none;
-        }
-
-        /* ── EDGE FADE MASKS ── */
         .trusted-fade {
           position: absolute;
-          inset: 0; z-index: 3;
+          inset: 0;
           pointer-events: none;
           background: linear-gradient(
             to right,
-            rgba(6,12,30,1)   0%,
-            transparent       12%,
-            transparent       88%,
-            rgba(6,12,30,1)   100%
+            #04091a 0%,
+            transparent 12%,
+            transparent 88%,
+            #04091a 100%
           );
+          z-index: 3;
         }
 
-        /* ── HEADING ── */
-        .trusted-heading {
-          position: relative;
-          z-index: 5;
-          text-align: center;
-          /* slightly brighter than before so it reads against glass */
-          color: rgba(100,160,220,0.70);
-          font-family: 'Inter', sans-serif;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.20em;
-          text-transform: uppercase;
-          margin: 0 0 38px;
-          /* subtle text glow */
-          text-shadow: 0 0 20px rgba(26,109,255,0.35);
-        }
+ /* ───────── MARQUEE STRUCTURE ───────── */
 
-        /* ── SCROLL CONTAINER ── */
         .trusted-overflow {
-          position: relative;
           overflow: hidden;
+          position: relative;
           z-index: 5;
         }
 
-        /* ── MARQUEE TRACK ── */
         .trusted-track {
           display: flex;
           align-items: center;
           gap: 72px;
-          padding: 10px 36px;
+          padding: 10px 0;
           width: max-content;
           animation: trustedMarquee 36s linear infinite;
         }
-        .trusted-track:hover { animation-play-state: paused; }
 
-        /* ── LOGO SLOT — glowing at rest ── */
+        .trusted-track:hover {
+          animation-play-state: paused;
+        }
+
+
+         /* ───────── LOGOS ───────── */
+
         .logo-slot {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 50px;   /* increased from 36px */
-            transform: scale(1.15); /* slightly bigger */
-            color: rgba(180,210,255,0.85);
-            filter:
-              drop-shadow(0 0 5px  rgba(26,109,255,0.50))
-              drop-shadow(0 0 14px rgba(26,109,255,0.20));
-            animation: logoPulse 3.5s ease-in-out infinite;
-            transition:
-              color     0.24s ease,
-              filter    0.24s ease,
-              transform 0.24s ease;
-          }
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 50px;
+          transform: scale(1.15);
+          color: rgba(180,210,255,0.85);
+          filter:
+            drop-shadow(0 0 5px  rgba(26,109,255,0.50))
+            drop-shadow(0 0 14px rgba(26,109,255,0.20));
+          animation: logoPulse 3.5s ease-in-out infinite;
+          transition:
+            color     0.24s ease,
+            filter    0.24s ease,
+            transform 0.24s ease;
+        }
 
+        .logo-slot:nth-child(2n) { animation-delay: -0.7s; }
+        .logo-slot:nth-child(3n) { animation-delay: -1.4s; }
+        .logo-slot:nth-child(4n) { animation-delay: -2.1s; }
+        .logo-slot:nth-child(5n) { animation-delay: -2.8s; }
 
-        /* Stagger pulse phase per nth-child so not all logos breathe together */
-        .logo-slot:nth-child(2n)   { animation-delay: -0.7s; }
-        .logo-slot:nth-child(3n)   { animation-delay: -1.4s; }
-        .logo-slot:nth-child(4n)   { animation-delay: -2.1s; }
-        .logo-slot:nth-child(5n)   { animation-delay: -2.8s; }
-
-        /* Hover — fully lit, bright white + intense glow */
         .logo-slot:hover {
           color: #fff;
           filter:
@@ -347,28 +251,42 @@ export default function TrustedBy() {
           transform: scale(1.12) translateY(-3px);
           animation-play-state: paused;
         }
+
+
+        .trusted-overflow {
+  padding: 0 20px;
+}
+
+.trusted-container {
+  max-width: 1100px; /* 1200 se thoda tight */
+}
+
       `}</style>
 
-      <section aria-label="trusted-by" className="trusted-section">
 
-        {/* Animated border lines */}
-        <div className="trusted-border-top"    aria-hidden="true" />
-        <div className="trusted-border-bottom" aria-hidden="true" />
 
-        {/* Edge fade */}
-        <div className="trusted-fade" aria-hidden="true" />
+<section aria-label="trusted-by" className="trusted-section">
 
-        <div className="trusted-overflow">
-          <div className="trusted-track" ref={trackRef}>
-            {doubled.map((logo, i) => (
-              <div key={`${logo.alt}-${i}`} className="logo-slot" title={logo.alt}>
-                {logo.content}
-              </div>
-            ))}
+  <div className="section-divider" />
+
+  <div className="trusted-container">
+
+    <div className="trusted-fade" aria-hidden="true" />
+
+    <div className="trusted-overflow">
+      <div className="trusted-track" ref={trackRef}>
+        {doubled.map((logo, i) => (
+          <div key={`${logo.alt}-${i}`} className="logo-slot" title={logo.alt}>
+            {logo.content}
           </div>
-        </div>
+        ))}
+      </div>
+    </div>
 
-      </section>
+  </div>
+
+</section>
+
     </>
   );
 }

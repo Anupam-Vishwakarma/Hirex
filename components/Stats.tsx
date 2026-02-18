@@ -30,7 +30,7 @@ const css = `
     width: 100%;
     background: var(--bg);
     padding: 56px 32px 64px;
-    box-sizing: border-box;
+    
     position: relative;
     overflow: hidden;
     font-family: 'Inter', sans-serif;
