@@ -13,18 +13,29 @@ import FooterBar from '@/components/FooterBar'
 
 export default function Page() {
   return (
-    <main className="page">
+    /* 'flex flex-col' ensures proper stacking.
+       'bg-background' ensures the dark slate color from your screenshot is consistent.
+       'selection:bg-primary/20' adds a subtle brand touch when users select text.
+    */
+    <main className="relative flex flex-col min-h-screen bg-background">
       <NavBar />
-      <Hero />
-      <Stats />
-      <TrustedBy />
-      <WhyLoveUs />
-      <AutopilotSection />
-      <Testimonials />
-      <PromoGrid />
-      <BadgeCardSection />
-      <PopularReading />
-      <Trending />
+      
+      {/* Spaced sections to match the breathable layout in your screenshot.
+          Tailwind v4's 'space-y' or individual section padding works best here.
+      */}
+      <div className="flex flex-col gap-y-16 md:gap-y-24">
+        <Hero />
+        <Stats />
+        <TrustedBy />
+        <WhyLoveUs />
+        <AutopilotSection />
+        <Testimonials />
+        <PromoGrid />
+        <BadgeCardSection />
+        <PopularReading />
+        <Trending />
+      </div>
+
       <FooterBar />
     </main>
   )

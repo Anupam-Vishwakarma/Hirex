@@ -1,483 +1,170 @@
-import React from 'react';
+'use client';
 
-/* ─────────────────────────────────────────────
-   DATA
-───────────────────────────────────────────── */
-const floatTags = [
-  // LEFT SIDE
-  { label: 'Robotics',               cls: 'ft-robotics',   delay: '0.2s', dur: '1.6s' },
-  { label: 'Artificial Intelligence',cls: 'ft-ai',         delay: '0.5s', dur: '1.4s' },
-  { label: 'Databases',              cls: 'ft-databases',  delay: '0.8s', dur: '1.8s' },
-  { label: 'E-commerce',             cls: 'ft-ecomm',      delay: '0.3s', dur: '1.5s' },
-  { label: 'Node.js Developers',     cls: 'ft-node',       delay: '0.6s', dur: '1.6s' },
-  { label: 'Hardware',               cls: 'ft-hardware',   delay: '0.4s', dur: '1.4s' },
-  { label: 'Blockchain Developers',  cls: 'ft-blockchain', delay: '0.7s', dur: '1.7s' },
-  { label: 'Front End Devs',         cls: 'ft-frontend',   delay: '0.9s', dur: '1.5s' },
-  // RIGHT SIDE
-  { label: 'Cyber Security',         cls: 'ft-cyber',      delay: '0.1s', dur: '1.6s' },
-  { label: 'Aerospace',              cls: 'ft-aerospace',  delay: '0.4s', dur: '1.4s' },
-  { label: 'Seattle',                cls: 'ft-seattle',    delay: '0.7s', dur: '1.5s' },
-  { label: 'Austin',                 cls: 'ft-austin',     delay: '1.0s', dur: '1.4s' },
-  { label: 'San Francisco',          cls: 'ft-sf',         delay: '0.5s', dur: '1.7s' },
-  { label: 'SaaS',                   cls: 'ft-saas',       delay: '0.8s', dur: '1.5s' },
-  { label: 'Web3',                   cls: 'ft-web3',       delay: '0.2s', dur: '1.8s' },
-  { label: 'iOS Developers',         cls: 'ft-ios',        delay: '0.6s', dur: '1.6s' },
-  { label: 'Boston',                 cls: 'ft-boston',     delay: '0.3s', dur: '1.4s' },
-  { label: 'Vue.js Developers',      cls: 'ft-vuejs',      delay: '0.9s', dur: '1.7s' },
-  { label: 'Los Angeles',            cls: 'ft-la',         delay: '0.5s', dur: '1.6s' },
-];
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useSpring, useMotionValue } from 'framer-motion';
 
-const chips = [
-  'Growth', 'Founding Engineer', 'Product', 'Design',
-  'Data', 'Marketing', 'Remote', 'AI', 'Fintech', 'Web3',
-];
+// --- STARFIELD COMPONENT (Galaxy Movement) ---
+function Starfield() {
+  const [stars, setStars] = useState<{ id: number; x: number; y: number; size: number; duration: number; color: string }[]>([]);
 
-/* ─────────────────────────────────────────────
-   STYLES
-───────────────────────────────────────────── */
-const css = `
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+  useEffect(() => {
+    const colors = ['#ffffff', '#60a5fa', '#a78bfa', '#f472b6']; 
+    const newStars = Array.from({ length: 250 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 200 - 100, 
+      y: Math.random() * 200 - 100, 
+      size: Math.random() * 2 + 0.5,
+      duration: Math.random() * 2 + 1.5,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    }));
+    setStars(newStars);
+  }, []);
 
-  .hero-section {
-    --bg:          #04091a;
-    --accent:      #1a6dff;
-    --accent-dim:  rgba(26,109,255,0.14);
-    --accent-glow: rgba(26,109,255,0.38);
-    --body:        rgba(255,255,255,0.60);
-    --tag-bg:      rgba(26,109,255,0.09);
-    --tag-border:  rgba(26,109,255,0.24);
-    --tag-text:    #ffffff;
-    --chip-bg:     rgba(255,255,255,0.04);
-    --chip-border: rgba(255,255,255,0.10);
-    --chip-text:   rgba(255,255,255,0.55);
-
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    background: var(--bg);
-    display: flex;
-    overflow: hidden;
-    font-family: 'Inter', sans-serif;
-    color: #fff;
-  }
-
-  /* ── ATMOSPHERIC GLOW ── */
-  .hero-section::before {
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 60% 45% at 50% 30%, rgba(26,109,255,0.13) 0%, transparent 65%),
-      radial-gradient(ellipse 28% 28% at 12% 60%, rgba(26,109,255,0.06) 0%, transparent 55%),
-      radial-gradient(ellipse 28% 28% at 88% 55%, rgba(26,109,255,0.06) 0%, transparent 55%);
-    pointer-events: none; z-index: 0;
-    animation: atmospherePulse 8s ease-in-out infinite alternate;
-  }
-  @keyframes atmospherePulse {
-    0%   { opacity: 0.7; }
-    100% { opacity: 1;   }
-  }
-
-  /* ── SCANLINES ── */
-  .hero-section::after {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: repeating-linear-gradient(
-      0deg, transparent, transparent 3px,
-      rgba(255,255,255,0.007) 3px, rgba(255,255,255,0.007) 4px
-    );
-    pointer-events: none; z-index: 0;
-  }
-
-  /* ── GRID ── */
-  .hero-grid {
-    position: absolute; inset: 0; z-index: 1;
-    background-image:
-      linear-gradient(rgba(26,109,255,0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(26,109,255,0.045) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 80% 65% at 50% 36%, black 15%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 36%, black 15%, transparent 70%);
-    animation: gridBreath 7s ease-in-out infinite alternate;
-  }
-  @keyframes gridBreath {
-    0%   { opacity: 0.3; }
-    100% { opacity: 0.8; }
-  }
-
-  /* ── FLOATING TAGS ── */
-  .float-tags {
-    position: absolute; inset: 0;
-    pointer-events: none; z-index: 2;
-  }
-
-  .float-tag {
-    position: absolute;
-    pointer-events: all;
-    background: var(--tag-bg);
-    border: 1px solid var(--tag-border);
-    color: var(--tag-text);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem; font-weight: 500;
-    padding: 7px 16px; border-radius: 100px;
-    white-space: nowrap;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    letter-spacing: 0.025em;
-    opacity: 0;
-    animation:
-      tagReveal 0.8s cubic-bezier(0.22,1,0.36,1) calc(var(--d, 0s) + 0.5s) forwards,
-      tagFloat  var(--dur, 1.6s) ease-in-out var(--d, 0s) infinite alternate;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-    transform-origin: center;
-  }
-  .float-tag:hover {
-    border-color: rgba(26,109,255,0.7);
-    box-shadow: 0 0 22px rgba(26,109,255,0.35);
-    color: #fff;
-    transform: scale(1.18) !important;
-    z-index: 10;
-  }
-
-  @keyframes tagReveal {
-    from { opacity: 0; transform: translateY(14px) scale(0.93); }
-    to   { opacity: 1; transform: translateY(0px)  scale(1);    }
-  }
-
-  /* Fast float — 24px travel, 1.4–1.8s cycle */
-  @keyframes tagFloat {
-    0%   { transform: translateY(0px); }
-    100% { transform: translateY(-24px); }
-  }
-
-  /* ── TAG POSITIONS — more vertical spread ── */
-  /* LEFT column */
-  .ft-robotics   { top:  6%; left:  3%; }
-  .ft-ai         { top:  3%; left: 18%; }
-  .ft-databases  { top: 22%; left:  2%; }
-  .ft-ecomm      { top: 22%; left: 16%; }
-  .ft-node       { top: 38%; left:  2%; }
-  .ft-hardware   { top: 38%; left: 18%; }
-  .ft-blockchain { top: 55%; left:  5%; }
-  .ft-frontend   { top: 22%; left: 33%; }
-
-  /* RIGHT column */
-  .ft-aerospace  { top:  3%; right:  4%; }
-  .ft-cyber      { top:  9%; right: 16%; }
-  .ft-seattle    { top: 16%; right:  4%; }
-  .ft-austin     { top: 18%; right: 11%; }
-  .ft-sf         { top: 24%; right: 16%; }
-  .ft-saas       { top: 24%; right:  4%; }
-  .ft-web3       { top: 25%; right:  1%; }
-  .ft-ios        { top: 38%; right: 16%; }
-  .ft-boston     { top: 38%; right: 31%; }
-  .ft-vuejs      { top: 48%; right: 12%; }
-  .ft-la         { top: 56%; right:  2%; }
-
-  /* ── CONTENT WRAPPER ── */
-  .hero-content {
-    position: relative; z-index: 3;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: space-between;
-    text-align: center;
-    width: 100%; min-height: 100vh;
-    padding: 130px 24px 52px;
-    box-sizing: border-box;
-  }
-
-  .hero-headline-wrap {
-    flex: 1;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  /* ── HEADLINE — slightly smaller ── */
-  .hero-content h1 {
-    font-family: 'Sora', sans-serif;
-    font-size: clamp(2rem, 4.4vw, 4.2rem);
-    font-weight: 800;
-    line-height: 1.08;
-    color: #fff;
-    letter-spacing: -0.04em;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 0.15em;
-    flex-wrap: nowrap;
-    animation: headlineReveal 1s cubic-bezier(0.22,1,0.36,1) 0.15s both;
-  }
-
-  .hero-content h1 .h-prefix {
-    color: #1a6dff;
-    font-weight: 800;
-    text-shadow: 0 0 40px rgba(26,109,255,0.7);
-    flex-shrink: 0;
-  }
-
-  /* Dashed border */
-  .hero-content h1 .h-boxed {
-    display: inline-flex;
-    align-items: center;
-    border: 2.5px dashed rgba(255,255,255,0.52);
-    border-radius: 14px;
-    padding: 0.05em 0.28em 0.1em;
-    color: #fff;
-    box-shadow: 0 0 28px rgba(26,109,255,0.12), inset 0 0 20px rgba(26,109,255,0.05);
-    flex-shrink: 0;
-  }
-
-  @keyframes headlineReveal {
-    from { opacity: 0; transform: translateY(36px) scale(0.96); filter: blur(6px); }
-    to   { opacity: 1; transform: translateY(0) scale(1);       filter: blur(0);   }
-  }
-
-  /* ── BOTTOM BLOCK ── */
-  .hero-bottom {
-    display: flex; flex-direction: column;
-    align-items: center; width: 100%;
-  }
-
-  .hero-divider {
-    width: 100%; max-width: 640px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(26,109,255,0.35) 30%, rgba(26,109,255,0.35) 70%, transparent);
-   margin-top: 150px;
-    margin-bottom: 150px;
-    animation: riseUp 0.85s cubic-bezier(0.22,1,0.36,1) 0.3s both;
-  }
-
-  .hero-subtitle {
-    font-size: clamp(0.95rem, 1.8vw, 1.12rem);
-    color: var(--body);
-    margin-bottom: 28px;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    animation: riseUp 0.85s cubic-bezier(0.22,1,0.36,1) 0.42s both;
-  }
-
-  .hero-cta {
-    display: flex; gap: 14px;
-    margin-bottom: 36px;
-    flex-wrap: wrap; justify-content: center;
-    animation: riseUp 0.85s cubic-bezier(0.22,1,0.36,1) 0.55s both;
-  }
-
-  @keyframes riseUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0);    }
-  }
-
-  /* ── BUTTONS ── */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    font-family: 'Sora', sans-serif;
-    font-size: 0.92rem; font-weight: 600;
-    padding: 13px 32px; border-radius: 100px;
-    text-decoration: none; cursor: pointer;
-    letter-spacing: 0.015em;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
-    position: relative; overflow: hidden;
-  }
-  .btn::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.13) 50%, transparent 70%);
-    transform: translateX(-100%);
-    transition: transform 0.42s ease;
-    border-radius: inherit;
-  }
-  .btn:hover::after { transform: translateX(100%); }
-
-  .btn-primary {
-    background: #1a6dff; color: #fff;
-    border: 1px solid rgba(26,109,255,0.6);
-    box-shadow: 0 0 22px rgba(26,109,255,0.40), 0 4px 14px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-  .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 40px rgba(26,109,255,0.60), 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-
-  .btn-ghost {
-    background: rgba(255,255,255,0.04); color: #fff;
-    border: 1px solid rgba(255,255,255,0.18);
-  }
-  .btn-ghost:hover {
-    background: rgba(26,109,255,0.10);
-    border-color: rgba(26,109,255,0.5);
-    color: #fff; transform: translateY(-3px);
-    box-shadow: 0 0 18px rgba(26,109,255,0.22);
-  }
-
-  /* ── WORD-CLOUD CHIPS ── */
-  .word-cloud {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    justify-content: center; max-width: 580px;
-    animation: riseUp 0.85s cubic-bezier(0.22,1,0.36,1) 0.68s both;
-  }
-
-  .chip {
-    background: var(--chip-bg);
-    border: 1px solid var(--chip-border);
-    color: var(--chip-text);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.74rem; font-weight: 500;
-    padding: 5px 14px; border-radius: 100px;
-    letter-spacing: 0.025em; cursor: default;
-    transition: background 0.22s, color 0.22s, border-color 0.22s, box-shadow 0.22s;
-  }
-  .chip:hover {
-    background: var(--accent-dim);
-    color: #fff;
-    border-color: rgba(26,109,255,0.4);
-    box-shadow: 0 0 12px rgba(26,109,255,0.18);
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 1100px) {
-    .ft-frontend, .ft-boston { display: none; }
-  }
-  @media (max-width: 860px) {
-    .ft-ecomm, .ft-hardware, .ft-blockchain,
-    .ft-sf, .ft-saas, .ft-ios, .ft-vuejs,
-    .ft-la, .ft-austin, .ft-seattle { display: none; }
-  }
-  @media (max-width: 600px) {
-    .float-tag { display: none; }
-    .hero-content h1 {
-    white-space: normal !important;
-    flex-wrap: wrap !important;
-    justify-content: center;
-    text-align: center;
-  }
-  }
-
-  @media (max-width: 480px) {
-  .hero-content h1 {
-    white-space: normal;
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
-  }
-}
-
-@media (max-width: 600px) {
-  .hero-divider {
-    margin-top: 60px;
-    margin-bottom: 60px;
-  }
-}
-
-@media (max-width: 480px) {
-  .btn {
-    padding: 12px 22px;
-    font-size: 0.85rem;
-  }
-
-  .hero-cta {
-    gap: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-content {
-    padding-top: 90px;
-  }
-}
-
-@media (max-width: 600px) {
-
-  .hero-content h1 {
-    font-size: 2.8rem !important;
-    line-height: 1.05;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .hero-content h1 .h-boxed {
-    flex-direction: column;
-    align-items: center;
-    padding: 0.2em 0.4em;
-  }
-
-  .hero-content h1 .mobile-break {
-    display: block;
-  }
-
-}
-
-
-<h1>
-  <span className="h-prefix">H:</span>
-  <span className="h-boxed">
-    Find what's <span className="mobile-break">next</span>
-  </span>
-</h1>
-
-@media (max-width: 767px) {
-  .hero-title {
-    font-size: 48px;
-    line-height: 1.1;
-  }
-}
-
-.mobile-break {
-  margin-left: 10px;
-}
-
-`;
-
-/* ─────────────────────────────────────────────
-   COMPONENT
-───────────────────────────────────────────── */
-export default function Hero() {
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: css }} />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {stars.map((star) => (
+        <motion.div
+          key={star.id}
+          className="absolute rounded-full"
+          initial={{ x: '50vw', y: '50vh', scale: 0, opacity: 0 }}
+          animate={{ 
+            x: `calc(50vw + ${star.x}vw)`, 
+            y: `calc(50vh + ${star.y}vh)`, 
+            scale: [0, star.size], 
+            opacity: [0, 1, 0],
+            backgroundColor: ['#ffffff', star.color, '#ffffff'] 
+          }}
+          transition={{ duration: star.duration, repeat: Infinity, ease: "easeIn", delay: Math.random() * 2 }}
+          style={{ width: star.size, height: star.size }}
+        />
+      ))}
+    </div>
+  );
+}
 
-      <section className="hero-section">
-        <div className="hero-grid" aria-hidden="true" />
+function FloatingTag({ tag, mouseX, mouseY, mode }: any) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const springConfig = { damping: 12, stiffness: 450, mass: 0.4 };
+  const dX = useSpring(0, springConfig);
+  const dY = useSpring(0, springConfig);
 
-        {/* Floating tags */}
-        <div className="float-tags" aria-hidden="true">
-          {floatTags.map(({ label, cls, delay, dur }) => (
-            <span
-              key={label}
-              className={`float-tag ${cls}`}
-              style={{
-                ['--d'   as string]: delay,
-                ['--dur' as string]: dur,
-              }}
-            >
-              {label}
-            </span>
-          ))}
+  useEffect(() => {
+    const handleMouseMove = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distanceX = mouseX.get() - centerX;
+      const distanceY = mouseY.get() - centerY;
+      const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+      
+      if (distance < 300) {
+        const force = (300 - distance) / 300;
+        const multiplier = mode === 'gravity' ? 1.5 : -1.8;
+        dX.set(distanceX * force * multiplier);
+        dY.set(distanceY * force * multiplier);
+      } else {
+        dX.set(0); dY.set(0);
+      }
+    };
+    const unsubX = mouseX.on("change", handleMouseMove);
+    const unsubY = mouseY.on("change", handleMouseMove);
+    return () => { unsubX(); unsubY(); };
+  }, [mouseX, mouseY, dX, dY, mode]);
+
+  return (
+    <motion.span
+      ref={ref}
+      style={{ top: tag.top, left: tag.left, right: tag.right, x: dX, y: dY }}
+      whileHover={{ scale: 1.5, zIndex: 100, backgroundColor: "rgba(59, 130, 246, 0.5)" }}
+      className="absolute px-5 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl 
+                 text-[13px] font-bold text-white/90 shadow-2xl
+                 pointer-events-auto cursor-pointer whitespace-nowrap transition-colors"
+    >
+      {tag.label}
+    </motion.span>
+  );
+}
+
+export default function Hero() {
+  const [mode, setMode] = useState<'repel' | 'gravity'>('repel');
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const allTags = [
+    { label: 'Robotics', top: '15%', left: '8%' },
+    { label: 'Artificial Intelligence', top: '8%', left: '22%' },
+    { label: 'Next.js', top: '18%', right: '12%' },
+    { label: 'Cyber Security', top: '10%', right: '28%' },
+    { label: 'Web3', top: '45%', right: '5%' },
+    { label: 'Rust', top: '55%', left: '5%' },
+    { label: 'Fintech', top: '65%', left: '15%' },
+    { label: 'UI/UX Design', top: '72%', right: '18%' },
+    { label: 'E-commerce', top: '35%', left: '18%' },
+    { label: 'Node.js', top: '48%', left: '12%' },
+    { label: 'Blockchain', top: '75%', left: '4%' },
+    { label: 'Aerospace', top: '5%', right: '5%' },
+    { label: 'Seattle', top: '28%', right: '5%' },
+    { label: 'Hardware', top: '40%', left: '2%' },
+    { label: 'Machine Learning', top: '25%', left: '30%' },
+    { label: 'Full Stack', top: '82%', right: '10%' },
+  ];
+
+  return (
+    <section 
+      onMouseMove={(e) => { mouseX.set(e.clientX); mouseY.set(e.clientY); }}
+      className="relative w-full min-h-screen bg-[#030712] flex flex-col items-center overflow-hidden text-white"
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(30,58,138,0.2),_transparent_70%)] z-0" />
+      <Starfield />
+
+      {/* Mode Toggle - HIDDEN ON MOBILE (hidden sm:flex) */}
+      <div className="absolute top-28 z-50 hidden md:flex bg-white/5 border border-white/10 p-1 rounded-full backdrop-blur-md scale-90">
+        {['repel', 'gravity'].map((m) => (
+          <button key={m} onClick={() => setMode(m as any)}
+            className={`px-6 py-2 rounded-full text-[10px] font-black tracking-widest transition-all ${mode === m ? 'bg-blue-600' : 'opacity-40'}`}>
+            {m.toUpperCase()}
+          </button>
+        ))}
+      </div>
+
+      {/* Floating Tags - HIDDEN ON MOBILE (hidden md:block) */}
+      <div className="absolute inset-0 z-10 pointer-events-none hidden md:block">
+        {allTags.map((tag, i) => (
+          <FloatingTag key={i} tag={tag} mouseX={mouseX} mouseY={mouseY} mode={mode} />
+        ))}
+      </div>
+
+      {/* Center Content - Adjusted spacing for Mobile */}
+      <div className="relative z-20 flex-1 flex flex-col items-center justify-center w-full px-4 pt-10 md:pt-0">
+        <motion.h1 
+          className="font-sora flex flex-col md:flex-row items-center gap-2 md:gap-6 
+                     text-[clamp(2.8rem,14vw,7.5rem)] font-extrabold tracking-tighter text-center"
+        >
+          <span className="text-blue-500 drop-shadow-[0_0_40px_rgba(37,99,235,0.8)]">H:</span>
+          <span className="inline-flex items-center px-6 md:px-12 border-[2px] border-dashed border-white/20 rounded-[30px] md:rounded-[70px] py-1 md:py-3 backdrop-blur-sm">
+            Find what's next
+          </span>
+        </motion.h1>
+      </div>
+
+      {/* Footer Area */}
+      <div className="relative z-20 w-full flex flex-col items-center pb-12 md:pb-24 px-6 bg-gradient-to-t from-[#030712] via-transparent to-transparent">
+        <div className="w-full max-w-lg h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent mb-8 md:mb-12" />
+        
+        <p className="text-white/50 text-sm md:text-lg font-medium mb-8 md:mb-10 text-center max-w-[280px] md:max-w-none">
+          Where startups and job seekers connect
+        </p>
+        
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full sm:w-auto">
+          <button className="w-full sm:px-16 py-4 bg-blue-600 rounded-full font-bold text-xs tracking-widest hover:scale-105 transition-all shadow-xl shadow-blue-500/20 uppercase">
+            Post a job
+          </button>
+          <button className="w-full sm:px-16 py-4 bg-white/5 border border-white/10 rounded-full font-bold text-xs tracking-widest hover:bg-white/10 transition-all backdrop-blur-lg uppercase">
+            Find jobs
+          </button>
         </div>
-
-        <div className="hero-content">
-
-          <div className="hero-headline-wrap">
-            <h1>
-              <span className="h-prefix">H:</span>
-              <span className="h-boxed">
-                Find what's{" "}
-              <span className="mobile-break">next</span>
-            </span>
-          </h1>      
-          </div>
-
-          <div className="hero-bottom">
-            <div className="hero-divider" aria-hidden="true" />
-            <p className="hero-subtitle">Where startups and job seekers connect</p>
-
-            <div className="hero-cta">
-              <a className="btn btn-primary" href="#">Post a job</a>
-              <a className="btn btn-ghost"   href="#">Find your next job</a>
-            </div>
-
-            
-          </div>
-
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

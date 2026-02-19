@@ -1,170 +1,95 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { motion, useInView, useSpring, useTransform } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
-   DATA
+    DATA
 ───────────────────────────────────────────── */
 const stats = [
-  { target: 8,   suffix: 'M+', label: 'Matches Made',              duration: 2000 },
-  { target: 150, suffix: 'K+', label: 'Tech Jobs',                 duration: 2200 },
-  { target: 10,  suffix: 'M+', label: 'Startup Ready Candidates',  duration: 1800 },
+  { target: 8, suffix: 'M+', label: 'Matches Made' },
+  { target: 150, suffix: 'K+', label: 'Tech Jobs' },
+  { target: 10, suffix: 'M+', label: 'Startup Ready Candidates' },
 ];
 
-
 /* ─────────────────────────────────────────────
-   STYLES
+    COUNTER COMPONENT
 ───────────────────────────────────────────── */
-const css = `
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@400;500&display=swap');
+function Counter({ value }: { value: number }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
 
-  .stats-section {
-    width: 100%;
-    padding: 80px 20px;
-    text-align: center;
-    background: #04091a;
-    font-family: 'Inter', sans-serif;
-  }
+  const spring = useSpring(0, {
+    mass: 1,
+    stiffness: 100,
+    damping: 30,
+  });
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 60px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
+  const display = useTransform(spring, (current) => Math.round(current));
 
-  .stat-card {
-    background: none;
-    border: none;
-    padding: 0;
-    box-shadow: none;
-  }
-
-  .stat-num {
-    font-family: 'Sora', sans-serif;
-    font-size: clamp(3rem, 6vw, 4rem);
-    font-weight: 800;
-    color: #ffffff;
-    letter-spacing: -0.03em;
-    margin-bottom: 14px;
-  }
-
-  .stat-label {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #6f8fb3;
-  }
-
-  @media (max-width: 768px) {
-    .stats-grid {
-      grid-template-columns: 1fr;
-      gap: 40px;
+  useEffect(() => {
+    if (inView) {
+      spring.set(value);
     }
-  }
-`;
+  }, [inView, spring, value]);
 
-
-/* ─────────────────────────────────────────────
-   COUNTER HOOK
-───────────────────────────────────────────── */
-function useCountUp(target: number, duration: number, started: boolean) {
-  const [value, setValue] = useState(0);
-  const rafRef = useRef<number>(0);
-
-  useEffect(() => {
-    if (!started) return;
-
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Smooth ease-out
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const next = Math.round(eased * target);
-
-      setValue(next);
-
-      if (progress < 1) {
-        rafRef.current = requestAnimationFrame(tick);
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [started, target, duration]);
-
-  return value;
+  return <motion.span ref={ref}>{display}</motion.span>;
 }
 
-
 /* ─────────────────────────────────────────────
-   STAT CARD
-───────────────────────────────────────────── */
-function StatCard({
-  target,
-  suffix,
-  label,
-  duration,
-}: {
-  target: number;
-  suffix: string;
-  label: string;
-  duration: number;
-}) {
-  const [started, setStarted] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  // Start counter when visible
-  useEffect(() => {
-    const el = cardRef.current;
-    if (!el) return;
-
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStarted(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  const value = useCountUp(target, duration, started);
-
-  return (
-  <div className="stat-card" ref={cardRef}>
-    <div className="stat-num">
-      {value}{suffix}
-    </div>
-
-    <div className="stat-label">{label}</div>
-  </div>
-);
-
-}
-
-
-/* ─────────────────────────────────────────────
-   COMPONENT
+    MAIN COMPONENT
 ───────────────────────────────────────────── */
 export default function Stats() {
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: css }} />
-      <section className="stats-section">
-        <div className="stats-grid">
-          {stats.map((s) => (
-            <StatCard key={s.label} {...s} />
-          ))}
-        </div>
-      </section>
-    </>
+    // Changed bg to transparent and removed top padding to match flow
+    <section className="w-full bg-transparent pt-0 pb-12 px-6 relative overflow-hidden font-inter">
+      
+      {/* 1. The Downward Arrow (Centered logic to match your reference) */}
+      <div className="flex justify-center mb-12">
+        <motion.div 
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/30"
+        >
+          <ChevronDown size={28} strokeWidth={1.5} />
+        </motion.div>
+      </div>
+
+      {/* 2. Stats Grid */}
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+        {stats.map((stat, idx) => (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: idx * 0.1, duration: 0.8 }}
+            className="flex flex-col items-center text-center group"
+          >
+            {/* Number Styling - Sora Font for impact */}
+            <div className="text-white font-sora font-extrabold text-5xl md:text-6xl tracking-tighter mb-4 group-hover:text-blue-400 transition-colors duration-500">
+              <Counter value={stat.target} />
+              <span className="ml-1">{stat.suffix}</span>
+            </div>
+
+            {/* Label Styling */}
+            <div className="text-[#6f8fb3] font-semibold text-xs md:text-sm uppercase tracking-[0.2em] max-w-[200px]">
+              {stat.label}
+            </div>
+
+            {/* Subtle glow under stat */}
+            <motion.div 
+              className="h-[1px] w-0 bg-blue-500/50 mt-6 rounded-full opacity-0 group-hover:opacity-100 group-hover:w-16 transition-all duration-700"
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* 3. Decorative Background Element - Matched to Global BG */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none -z-10">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/[0.03] blur-[120px] rounded-full" />
+      </div>
+    </section>
   );
 }

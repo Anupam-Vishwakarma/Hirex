@@ -1,160 +1,103 @@
 'use client';
 
+import React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Home, Briefcase, UserCircle, Headphones } from 'lucide-react';
+
+const NAV_ITEMS = [
+  { label: 'Home', href: '/', icon: Home },
+  { label: 'Jobs', href: '/jobs', icon: Briefcase },
+  { label: 'Intern', href: '/internship', icon: UserCircle },
+  { label: 'Support', href: '/support', icon: Headphones },
+];
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
 
   return (
-    <>
-      <style>{`
-        .mb-nav {
-          position: fixed;
-          bottom: 18px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: calc(100% - 32px);
-          max-width: 520px;
-          height: 72px;
-          background: linear-gradient(
-            145deg,
-            rgba(8,15,34,0.95),
-            rgba(13,21,53,0.95)
-          );
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
-          border: 1px solid rgba(26,109,255,0.18);
-          border-radius: 36px;
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          z-index: 9999;
-          box-shadow:
-            0 10px 40px rgba(0,0,0,0.45),
-            0 0 40px rgba(26,109,255,0.08);
-        }
-
-        .mb-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          font-size: 11px;
-          font-weight: 600;
-          color: rgba(255,255,255,0.55);
-          text-decoration: none;
-          gap: 4px;
-          transition: color 0.2s, transform 0.2s;
-        }
-
-        .mb-item.active {
-          color: #1a6dff;
-        }
-
-        .mb-item:hover {
-          transform: translateY(-2px);
-        }
-
-        .mb-icon {
-          width: 22px;
-          height: 22px;
-        }
-
-        /* CENTER WHATSAPP */
-        .mb-center-wrap {
-          position: relative;
-          width: 56px;
-          height: 72px;
-          display: flex;
-          justify-content: center;
-        }
-
-        .mb-center-btn {
-          position: absolute;
-          top: -18px;
-          width: 66px;
-          height: 66px;
-          border-radius: 50%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          box-shadow:
-            0 12px 28px rgba(0,0,0,0.45),
-            0 0 25px rgba(37,211,102,0.5);
-          transition: transform 0.2s;
-        }
-
-        .mb-center-btn:hover {
-          transform: scale(1.08);
-        }
-
-        .mb-center-btn svg {
-          width: 26px;
-          height: 26px;
-          color: white;
-        }
-
-        .mb-label-center {
-          margin-top: 26px;
-          font-size: 11px;
-          font-weight: 600;
-          color: rgba(255,255,255,0.7);
-        }
-
-        /* Hide on desktop */
-        @media (min-width: 768px) {
-          .mb-nav {
-            display: none;
-          }
-        }
-      `}</style>
-
-      <nav className="mb-nav">
-
-        {/* HOME */}
-        <Link href="/" className={`mb-item ${pathname === '/' ? 'active' : ''}`}>
-          <svg className="mb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M3 9L12 2L21 9V20H3V9Z" />
-          </svg>
-          Home
-        </Link>
-
-        {/* JOBS */}
-        <Link href="/jobs" className={`mb-item ${pathname === '/jobs' ? 'active' : ''}`}>
-          <svg className="mb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="2" y="7" width="20" height="14" rx="2" />
-            <path d="M16 3H8V7H16V3Z" />
-          </svg>
-          Jobs
-        </Link>
-
+    <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 
+                    w-[92%] max-w-[440px] h-[68px] 
+                    bg-slate-950/85 backdrop-blur-2xl 
+                    border border-white/10 rounded-[32px] 
+                    flex justify-between items-center z-[9999] 
+                    shadow-[0_20px_50px_rgba(0,0,0,0.6)] 
+                    md:hidden px-2">
+      
+      {NAV_ITEMS.map((item, index) => {
+        const isActive = pathname === item.href;
         
-        {/* CENTER WHATSAPP */}
-            <div className="mb-center-wrap">
-            <a href="https://wa.me/919999999999" target="_blank" className="mb-center-btn">
-                <img src="/logo/whatapp.png" alt="WhatsApp" width={66} height={66} />
-            </a>
-            <div className="mb-label-center"></div>
-            </div>
+        return (
+          <React.Fragment key={item.label}>
+            {/* WhatsApp placed exactly in the center slot */}
+            {index === 2 && <WhatsAppButton />}
+            
+            <Link 
+              href={item.href} 
+              className="flex flex-col items-center justify-center flex-1 h-full relative"
+            >
+              <motion.div 
+                animate={{ scale: isActive ? 1.05 : 1 }}
+                className={`transition-colors duration-300 ${isActive ? 'text-blue-500' : 'text-white/40'}`}
+              >
+                <item.icon size={19} strokeWidth={isActive ? 2.5 : 2} />
+              </motion.div>
+              
+              <span className={`text-[9px] font-bold tracking-tight mt-1 uppercase transition-colors duration-300 ${isActive ? 'text-blue-500' : 'text-white/40'}`}>
+                {item.label}
+              </span>
 
-        {/* INTERNSHIP */}
-        <Link href="/internship" className={`mb-item ${pathname === '/internship' ? 'active' : ''}`}>
-          <svg className="mb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="7" r="4"/>
-            <path d="M5.5 21C6.5 17 9 15 12 15C15 15 17.5 17 18.5 21"/>
-          </svg>
-          Internship
-        </Link>
+              {isActive && (
+                <motion.div 
+                  layoutId="nav-dot"
+                  className="absolute -bottom-1 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.9)]"
+                />
+              )}
+            </Link>
+          </React.Fragment>
+        );
+      })}
+    </nav>
+  );
+}
 
-        {/* SUPPORT */}
-        <Link href="/support" className={`mb-item ${pathname === '/support' ? 'active' : ''}`}>
-          <svg className="mb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M18 8A6 6 0 0 0 6 8V15H4V8A8 8 0 0 1 20 8V15H18V8Z"/>
-          </svg>
-          Support
-        </Link>
+function WhatsAppButton() {
+  const phoneNumber = "918700236923";
+  const message = encodeURIComponent(
+    "Hello HireX Team! 👋\n\n" +
+    "I'm interested in exploring new opportunities.\n\n" +
+    "Name: \n" +
+    "Current Role: \n" +
+    "Portfolio/LinkedIn: "
+  );
 
-      </nav>
-    </>
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+
+  return (
+    <div className="relative flex flex-col items-center justify-center px-1">
+      <a 
+        href={whatsappUrl} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="relative -top-5 group flex flex-col items-center"
+      >
+        {/* Subtle Green Glow */}
+        <div className="absolute inset-0 bg-green-500/10 blur-xl rounded-full scale-125 animate-pulse" />
+        
+        {/* Icon scaled down to 52px for better proportions */}
+        <motion.div 
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="relative w-[52px] h-[52px] flex items-center justify-center"
+        >
+          <img 
+            src="/logo/whatapp.png" 
+            alt="WhatsApp" 
+            className="w-full h-full object-contain drop-shadow-[0_5px_12px_rgba(37,211,102,0.4)]" 
+          />
+        </motion.div>
+      </a>
+    </div>
   );
 }
