@@ -138,14 +138,14 @@ export default function Hero() {
       {/* Center Content - Adjusted spacing for Mobile */}
       <div className="relative z-20 flex-1 flex flex-col items-center justify-center w-full px-4 pt-10 md:pt-0">
         <motion.h1 
-          className="font-sora flex flex-col md:flex-row items-center gap-2 md:gap-6 
-                     text-[clamp(2.8rem,14vw,6.5rem)] font-extrabold tracking-tighter text-center"
-        >
+          className="font-sora flex flex-col md:flex-row items-center gap-2 md:gap-4 lg:gap-6 
+                    text-[clamp(2.5rem,10vw,6rem)] font-extrabold tracking-tighter text-center"
+            >
           <span className="text-blue-500 drop-shadow-[0_0_40px_rgba(37,99,235,0.8)]">H:</span>
-          <span className="inline-flex items-center px-6 md:px-12 border-[2px] border-dashed border-white/20 rounded-[30px] md:rounded-[70px] py-1 md:py-3 backdrop-blur-sm">
+          <span className="inline-flex items-center px-5 sm:px-8 md:px-12 border-[2px] border-dashed border-white/20 rounded-[30px] md:rounded-[70px] py-1 md:py-3 backdrop-blur-sm whitespace-nowrap">
             Find what's next
           </span>
-        </motion.h1>
+</motion.h1>
       </div>
 
       {/* Footer Area */}
